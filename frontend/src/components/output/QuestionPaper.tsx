@@ -50,22 +50,22 @@ export default function QuestionPaper({ result, isLoading, onDownload, onRegener
   }
 
   return (
-    <div>
-      <div id="top-banner" className="flex flex-col md:flex-row md:items-center justify-between bg-[#1A1A1A] text-white p-4 md:p-6 rounded-xl mb-8 gap-4 shadow-lg">
-        <p className="text-sm md:text-base opacity-90 max-w-2xl">
-          Certainly, Lakshya! Here are customized Question Paper for your CBSE Grade {result.className} {result.subject} classes on the NCERT chapters:
+    <div className="bg-[#1a1a1a] rounded-[32px] p-6 md:p-10 shadow-2xl relative overflow-hidden">
+      <div id="top-banner" className="flex flex-col md:flex-row md:items-start justify-between text-white mb-8 gap-6 relative z-10">
+        <p className="text-[17px] leading-relaxed opacity-90 max-w-2xl font-medium">
+          Certainly, Aditya Naulakha! Here are customized Question Paper for your CBSE Grade {result.className} {result.subject} classes on the NCERT chapters:
         </p>
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-3 shrink-0">
           <button 
             onClick={onRegenerate}
-            className="flex items-center justify-center gap-2 px-4 py-2 border border-white/30 rounded-lg hover:bg-white/10 transition-colors whitespace-nowrap text-sm font-medium"
+            className="flex items-center justify-center gap-2 px-5 py-2.5 bg-white/10 hover:bg-white/20 border border-white/20 text-white rounded-full transition-colors whitespace-nowrap text-sm font-bold shadow-sm"
           >
             <RefreshCcw className="w-4 h-4" />
             Regenerate
           </button>
           <button 
             onClick={onDownload}
-            className="flex items-center justify-center gap-2 px-4 py-2 border border-white/30 rounded-lg hover:bg-white/10 transition-colors whitespace-nowrap text-sm font-medium"
+            className="flex items-center justify-center gap-2 px-5 py-2.5 bg-white text-[#1a1a1a] rounded-full hover:bg-gray-100 transition-colors whitespace-nowrap text-sm font-bold shadow-sm"
           >
             <Download className="w-4 h-4" />
             Download as PDF
@@ -73,77 +73,79 @@ export default function QuestionPaper({ result, isLoading, onDownload, onRegener
         </div>
       </div>
 
-      <div id="question-paper" className={`max-w-[800px] mx-auto bg-brand-surface border border-border rounded-xl shadow-sm p-6 md:p-12 print:shadow-none print:border-none print:p-0 ${hideBadges ? 'hide-badges' : ''}`}>
-        
-        {/* Header */}
-        <div className="text-center mb-8">
-          <h1 className="text-2xl md:text-3xl font-bold text-text-primary mb-2">Delhi Public School, Bokaro Steel City</h1>
-          <h2 className="text-lg md:text-xl font-semibold text-text-secondary">{result.subject} - {result.className}</h2>
-          <h3 className="text-md font-medium text-text-secondary mt-1">{result.paperTitle}</h3>
-        </div>
-
-        {/* Meta Info */}
-        <div className="flex justify-between items-center border-b-[3px] border-text-primary pb-4 mb-6 font-bold text-text-primary">
-          <div>Time Allowed: {result.timeAllowed} minutes</div>
-          <div>Maximum Marks: {result.totalMarks}</div>
-        </div>
-
-        <p className="italic text-center text-text-secondary font-medium mb-8">
-          "All questions are compulsory unless stated otherwise."
-        </p>
-
-        <StudentInfoSection className={result.className} />
-
-        {/* Sections */}
-        {result.sections.map((section: any) => (
-          <div key={section.id} className="mb-12">
-            <div className="text-center mb-6">
-              <h3 className="text-xl font-bold text-text-primary mb-1">{section.title}</h3>
-              <p className="text-text-secondary font-semibold text-sm">{section.questionType}</p>
-              <p className="italic text-text-secondary text-sm mt-1">{section.instruction}</p>
-            </div>
-
-            <div className="space-y-6">
-              {section.questions.map((q: any) => (
-                <div key={q.id} className="flex items-start gap-4 text-text-primary">
-                  <div className="font-bold whitespace-nowrap">Q{q.id}.</div>
-                  <div className="flex-1">
-                    <span className="font-medium">{q.text}</span>
-                    <span className="badge-wrapper">
-                      <DifficultyBadge difficulty={q.difficulty} />
-                    </span>
-                  </div>
-                  <div className="font-bold text-text-secondary whitespace-nowrap">
-                    [{q.marks} {q.marks === 1 ? 'Mark' : 'Marks'}]
-                  </div>
-                </div>
-              ))}
-            </div>
+      <div className="relative z-10 bg-[#e8e8e8] p-4 md:p-8 rounded-[24px]">
+        <div id="question-paper" className={`mx-auto bg-white border border-border shadow-md p-8 md:p-14 print:shadow-none print:border-none print:p-0 ${hideBadges ? 'hide-badges' : ''}`}>
+          
+          {/* Header */}
+          <div className="text-center mb-8">
+            <h1 className="text-2xl md:text-3xl font-extrabold text-text-primary mb-2 tracking-tight">Delhi Public School, Bokaro Steel City</h1>
+            <h2 className="text-lg md:text-xl font-bold text-text-secondary">{result.subject} - {result.className}</h2>
+            <h3 className="text-md font-semibold text-text-secondary mt-1">{result.paperTitle}</h3>
           </div>
-        ))}
 
-        <div className="text-center font-bold text-text-primary mt-16 pt-8 border-t border-dashed border-border uppercase tracking-widest text-sm">
-          End of Question Paper
-        </div>
+          {/* Meta Info */}
+          <div className="flex justify-between items-center border-b-4 border-text-primary pb-4 mb-8 font-extrabold text-text-primary text-[15px]">
+            <div>Time Allowed: {result.timeAllowed} minutes</div>
+            <div>Maximum Marks: {result.totalMarks}</div>
+          </div>
 
-        {/* Answer Key */}
-        <div className="mt-20 pt-10 border-t-2 border-border print:break-before-page" id="answer-key">
-          <h2 className="text-2xl font-bold text-center mb-8">Answer Key</h2>
+          <p className="italic text-center text-text-secondary font-medium mb-10">
+            "All questions are compulsory unless stated otherwise."
+          </p>
+
+          <StudentInfoSection className={result.className} />
+
+          {/* Sections */}
           {result.sections.map((section: any) => (
-            <div key={`ans-${section.id}`} className="mb-8">
-              <h3 className="text-lg font-bold text-text-primary mb-4">{section.title}</h3>
-              <div className="space-y-4">
+            <div key={section.id} className="mb-14">
+              <div className="text-center mb-8">
+                <h3 className="text-xl font-extrabold text-text-primary mb-1 underline underline-offset-4 decoration-2">{section.title}</h3>
+                <p className="text-text-secondary font-bold text-sm">{section.questionType}</p>
+                <p className="italic text-text-secondary text-[13px] mt-1">{section.instruction}</p>
+              </div>
+
+              <div className="space-y-6">
                 {section.questions.map((q: any) => (
-                  <div key={`ans-${section.id}-${q.id}`} className="flex items-start gap-3">
-                    <span className="font-bold text-text-primary whitespace-nowrap">Q{q.id}.</span>
-                    <span className="text-text-secondary font-medium">{q.answer || 'No answer provided.'}</span>
+                  <div key={q.id} className="flex items-start gap-4 text-text-primary">
+                    <div className="font-extrabold whitespace-nowrap text-[15px]">Q{q.id}.</div>
+                    <div className="flex-1">
+                      <span className="font-semibold leading-relaxed text-[15px]">{q.text}</span>
+                      <span className="badge-wrapper">
+                        <DifficultyBadge difficulty={q.difficulty} />
+                      </span>
+                    </div>
+                    <div className="font-extrabold text-text-secondary whitespace-nowrap text-sm mt-0.5">
+                      [{q.marks} {q.marks === 1 ? 'Mark' : 'Marks'}]
+                    </div>
                   </div>
                 ))}
               </div>
             </div>
           ))}
+
+          <div className="text-center font-extrabold text-[#8C8C8C] mt-20 pt-8 border-t-2 border-dashed border-border uppercase tracking-widest text-xs">
+            End of Question Paper
+          </div>
+
+          {/* Answer Key */}
+          <div className="mt-24 pt-12 border-t-4 border-text-primary print:break-before-page" id="answer-key">
+            <h2 className="text-2xl font-extrabold text-center mb-10 uppercase tracking-tight">Answer Key</h2>
+            {result.sections.map((section: any) => (
+              <div key={`ans-${section.id}`} className="mb-10">
+                <h3 className="text-lg font-extrabold text-text-primary mb-5 underline decoration-2 underline-offset-4">{section.title}</h3>
+                <div className="space-y-5 bg-[#F9F9F9] p-6 rounded-xl border border-border">
+                  {section.questions.map((q: any) => (
+                    <div key={`ans-${section.id}-${q.id}`} className="flex items-start gap-4">
+                      <span className="font-extrabold text-text-primary whitespace-nowrap bg-white border border-border rounded px-2 py-0.5 text-sm shadow-sm">Q{q.id}</span>
+                      <span className="text-text-primary font-medium leading-relaxed">{q.answer || 'No answer provided.'}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            ))}
+          </div>
+          
         </div>
-        
       </div>
     </div>
   );

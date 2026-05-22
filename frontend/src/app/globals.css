@@ -4,7 +4,7 @@
   --color-brand-primary: #E8470A;
   --color-brand-success: #22C55E;
   --color-brand-danger: #EF4444;
-  --color-brand-bg: #F2F2F2;
+  --color-brand-bg: #E8E8E8;
   --color-brand-surface: #FFFFFF;
   --color-text-primary: #1A1A1A;
   --color-text-secondary: #6B6B6B;
@@ -15,6 +15,10 @@
   body {
     background-color: var(--color-brand-bg);
     color: var(--color-text-primary);
+  }
+  
+  input, select, textarea, button {
+    font-family: inherit;
   }
 }
 

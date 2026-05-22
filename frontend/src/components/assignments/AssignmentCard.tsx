@@ -24,28 +24,27 @@ export default function AssignmentCard({ assignment, onDelete }: AssignmentCardP
   };
 
   return (
-    <div className="bg-brand-surface rounded-xl border border-border p-6 shadow-sm hover:shadow-md transition-shadow relative">
-      <div className="flex justify-between items-start mb-4">
-        <Link href={`/assignments/${assignment._id}`} className="hover:text-brand-primary transition-colors">
-          <h3 className="text-lg font-bold text-text-primary underline decoration-border hover:decoration-brand-primary underline-offset-4">
+    <div className="bg-white rounded-[32px] p-8 shadow-sm border border-transparent hover:border-border hover:shadow-md transition-all relative">
+      <div className="flex justify-between items-start mb-16">
+        <Link href={`/assignments/${assignment._id}`} className="hover:text-brand-primary transition-colors flex-1 pr-4">
+          <h3 className="text-[22px] font-extrabold text-text-primary tracking-tight leading-tight">
             {assignment.title}
           </h3>
         </Link>
         <div className="relative">
           <button 
             onClick={() => setShowMenu(!showMenu)}
-            className="p-1 text-text-secondary hover:bg-brand-bg rounded-full transition-colors"
+            className="p-1 text-[#b3b3b3] hover:text-text-primary hover:bg-brand-bg rounded-full transition-colors"
           >
-            <MoreVertical className="w-5 h-5" />
+            <MoreVertical className="w-6 h-6" />
           </button>
           
           {showMenu && (
-            <div className="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg border border-border py-1 z-10">
+            <div className="absolute right-0 mt-2 w-48 bg-white rounded-[20px] shadow-[0_10px_40px_-10px_rgba(0,0,0,0.1)] border border-border py-2 z-10 overflow-hidden">
               <Link 
                 href={`/assignments/${assignment._id}`}
-                className="flex items-center gap-2 px-4 py-2 text-sm text-text-primary hover:bg-brand-bg transition-colors"
+                className="block px-5 py-3 text-[14px] font-bold text-text-primary hover:bg-[#F2F2F2] transition-colors"
               >
-                <Eye className="w-4 h-4" />
                 View Assignment
               </Link>
               <button 
@@ -53,9 +52,8 @@ export default function AssignmentCard({ assignment, onDelete }: AssignmentCardP
                   setShowMenu(false);
                   onDelete(assignment._id);
                 }}
-                className="flex items-center gap-2 w-full text-left px-4 py-2 text-sm text-brand-danger hover:bg-red-50 transition-colors"
+                className="block w-full text-left px-5 py-3 text-[14px] font-bold text-[#EF4444] hover:bg-red-50 transition-colors"
               >
-                <Trash2 className="w-4 h-4" />
                 Delete
               </button>
             </div>
@@ -63,12 +61,14 @@ export default function AssignmentCard({ assignment, onDelete }: AssignmentCardP
         </div>
       </div>
 
-      <div className="flex flex-wrap gap-x-8 gap-y-2 text-sm text-text-secondary">
-        <div className="flex items-center gap-2">
-          <span className="font-medium">Assigned on:</span> {formatDate(assignment.assignedOn)}
+      <div className="flex justify-between items-center text-[13px]">
+        <div>
+          <span className="font-extrabold text-text-primary">Assigned on : </span>
+          <span className="font-semibold text-[#8C8C8C]">{formatDate(assignment.assignedOn)}</span>
         </div>
-        <div className="flex items-center gap-2">
-          <span className="font-medium">Due:</span> {formatDate(assignment.dueDate)}
+        <div>
+          <span className="font-extrabold text-text-primary">Due : </span>
+          <span className="font-semibold text-[#8C8C8C]">{formatDate(assignment.dueDate)}</span>
         </div>
       </div>
       

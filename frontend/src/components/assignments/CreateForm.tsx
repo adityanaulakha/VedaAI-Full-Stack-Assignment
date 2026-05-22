@@ -93,56 +93,56 @@ export default function CreateForm() {
   };
 
   return (
-    <div className="max-w-2xl mx-auto">
-      {/* Breadcrumb / Title */}
+    <div className="max-w-3xl mx-auto pb-32">
+      {/* Title */}
       <div className="mb-6">
-        <div className="flex items-center gap-2 text-sm text-text-secondary mb-1">
-          <span>Assignment</span>
-          <span>&gt;</span>
-          <span className="text-brand-primary font-medium">Create Assignment</span>
-          <span className="w-1.5 h-1.5 bg-brand-success rounded-full block ml-1"></span>
-        </div>
-        <p className="text-text-secondary text-sm">Fill in the details to generate an assessment.</p>
+        <h1 className="text-[28px] font-extrabold text-text-primary">Create Assignment</h1>
+        <p className="text-[#8C8C8C] text-[15px] mt-1">Set up a new assignment for your students.</p>
       </div>
 
       {/* Progress Bar */}
-      <div className="w-full h-1.5 bg-border rounded-full mb-8 overflow-hidden">
-        <div 
-          className="h-full bg-text-primary transition-all duration-300 ease-in-out" 
-          style={{ width: store.currentStep === 1 ? '50%' : '100%' }}
-        />
+      <div className="flex gap-2 mb-8">
+        <div className={`h-2 flex-1 rounded-full transition-colors ${store.currentStep >= 1 ? 'bg-[#1a1a1a]' : 'bg-[#e5e5e5]'}`} />
+        <div className={`h-2 flex-1 rounded-full transition-colors ${store.currentStep >= 2 ? 'bg-[#1a1a1a]' : 'bg-[#e5e5e5]'}`} />
       </div>
 
-      <div className="bg-brand-surface rounded-2xl shadow-sm border border-border p-6 md:p-8">
+      <div className="bg-white rounded-[32px] shadow-sm p-8 md:p-10 relative">
+        <div className="mb-8 border-b border-border pb-6">
+          <h2 className="text-xl font-bold text-text-primary">
+            {store.currentStep === 1 ? 'Assignment Setup' : 'Assignment Details'}
+          </h2>
+          <p className="text-text-secondary text-sm mt-1">
+            {store.currentStep === 1 ? 'Basic configuration for the assignment' : 'Basic information about your assignment'}
+          </p>
+        </div>
+
         <form onSubmit={store.currentStep === 2 ? handleSubmit : (e) => { e.preventDefault(); handleNext(); }}>
           
           {error && (
-            <div className="mb-6 p-3 bg-red-50 text-brand-danger rounded-lg text-sm border border-red-100">
+            <div className="mb-8 p-4 bg-red-50 text-brand-danger rounded-[16px] text-sm border border-red-100 font-medium">
               {error}
             </div>
           )}
 
           {store.currentStep === 1 ? <Step1Form /> : <Step2Form />}
 
-          <div className="flex items-center justify-between mt-10 pt-6 border-t border-border">
+          <div className="fixed bottom-8 left-[calc(50%+140px)] -translate-x-1/2 flex items-center gap-4 z-40 bg-[#F2F2F2]/80 backdrop-blur-md p-2 rounded-full shadow-lg border border-white/20">
             {store.currentStep === 2 ? (
               <button 
                 type="button" 
                 onClick={handlePrevious}
-                className="px-6 py-3 rounded-full border border-border text-text-primary font-medium hover:bg-brand-bg transition-colors"
+                className="px-6 py-3.5 rounded-full bg-white text-text-primary font-bold shadow-sm hover:bg-gray-50 transition-colors"
                 disabled={isSubmitting}
               >
                 ← Previous
               </button>
-            ) : (
-              <div></div> // Empty div to push next button to the right
-            )}
+            ) : null}
 
             {store.currentStep === 1 ? (
               <button 
                 type="button" 
                 onClick={handleNext}
-                className="px-6 py-3 rounded-full bg-text-primary text-white font-medium hover:bg-black transition-colors"
+                className="px-8 py-3.5 rounded-full bg-[#1a1a1a] text-white font-bold shadow-md hover:bg-black transition-colors"
               >
                 Next →
               </button>
@@ -150,7 +150,7 @@ export default function CreateForm() {
               <button 
                 type="submit" 
                 disabled={isSubmitting}
-                className="px-8 py-3 rounded-full bg-text-primary text-white font-medium hover:bg-black transition-colors flex items-center gap-2 disabled:opacity-70"
+                className="px-8 py-3.5 rounded-full bg-[#1a1a1a] text-white font-bold shadow-md hover:bg-black transition-colors flex items-center gap-2 disabled:opacity-70"
               >
                 {isSubmitting ? (
                   <>

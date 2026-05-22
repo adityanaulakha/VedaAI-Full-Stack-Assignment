@@ -1,6 +1,7 @@
 "use client";
 
 import Link from 'next/link';
+import Image from 'next/image';
 import { usePathname } from 'next/navigation';
 import { Home, Users, FileText, Wrench, BookOpen, Settings, Sparkles } from 'lucide-react';
 
@@ -9,25 +10,21 @@ export default function Sidebar() {
 
   const navItems = [
     { name: 'Home', href: '/', icon: Home },
-    { name: 'My Groups', href: '/groups', icon: Users },
-    { name: 'Assignments', href: '/assignments', icon: FileText, count: 3 },
-    { name: 'AI Teacher\'s Toolkit', href: '/toolkit', icon: Wrench },
-    { name: 'My Library', href: '/library', icon: BookOpen },
+    { name: 'Assignments', href: '/assignments', icon: FileText, count: 10 },
   ];
 
   return (
-    <div className="hidden md:flex flex-col w-[280px] h-screen bg-brand-surface border-r border-border fixed left-0 top-0">
+    <div className="hidden md:flex flex-col w-[280px] h-[calc(100vh-32px)] m-4 rounded-[24px] bg-brand-surface fixed left-0 top-0 shadow-sm overflow-hidden z-20">
       {/* Logo */}
-      <div className="p-6 flex items-center gap-2">
-        <div className="w-8 h-8 bg-brand-primary rounded flex items-center justify-center text-white font-bold">V</div>
-        <span className="text-xl font-bold text-text-primary tracking-tight">VedaAI</span>
+      <div className="p-6 pb-8 flex items-center">
+        <Image src="/Logo.png" alt="VedaAI Logo" width={140} height={40} className="h-8 w-auto object-contain" />
       </div>
 
       {/* Create Button */}
-      <div className="px-6 pb-6">
+      <div className="px-5 pb-6">
         <Link href="/assignments/create">
-          <button className="w-full bg-text-primary text-white rounded-full py-3 px-4 flex items-center justify-center gap-2 font-medium hover:bg-black transition-colors">
-            <Sparkles className="w-4 h-4" />
+          <button className="w-full bg-[#2a2a2a] border-2 border-brand-primary text-white rounded-full py-3 px-4 flex items-center justify-center gap-2 font-medium hover:bg-black transition-colors shadow-sm">
+            <Sparkles className="w-4 h-4 text-white" />
             Create Assignment
           </button>
         </Link>
@@ -38,15 +35,15 @@ export default function Sidebar() {
         {navItems.map((item) => {
           const isActive = pathname.startsWith(item.href) && item.href !== '/' || (item.href === '/' && pathname === '/');
           const Icon = item.icon;
-          
+
           return (
-            <Link key={item.name} href={item.href} className={`flex items-center justify-between px-3 py-3 rounded-lg transition-colors ${isActive ? 'bg-brand-primary/10 text-brand-primary font-medium' : 'text-text-secondary hover:bg-brand-bg'}`}>
+            <Link key={item.name} href={item.href} className={`flex items-center justify-between px-4 py-3.5 rounded-[16px] transition-colors ${isActive ? 'bg-[#F2F2F2] text-text-primary font-semibold' : 'text-text-secondary hover:bg-brand-bg hover:text-text-primary font-medium'}`}>
               <div className="flex items-center gap-3">
-                <Icon className={`w-5 h-5 ${isActive ? 'text-brand-primary' : 'text-text-secondary'}`} />
+                <Icon className={`w-5 h-5 ${isActive ? 'text-text-primary' : 'text-text-secondary'}`} />
                 <span>{item.name}</span>
               </div>
               {item.count && (
-                <span className="bg-brand-primary text-white text-xs py-0.5 px-2 rounded-full font-medium">
+                <span className="bg-brand-primary text-white text-[10px] py-0.5 px-2 rounded-full font-bold">
                   {item.count}
                 </span>
               )}
@@ -56,18 +53,18 @@ export default function Sidebar() {
       </nav>
 
       {/* Bottom Profile */}
-      <div className="p-4 border-t border-border space-y-1">
-        <Link href="/settings" className="flex items-center gap-3 px-3 py-3 rounded-lg text-text-secondary hover:bg-brand-bg transition-colors mb-2">
+      <div className="p-4 space-y-2">
+        <Link href="/settings" className="flex items-center gap-3 px-4 py-3 rounded-[16px] text-text-secondary hover:bg-brand-bg hover:text-text-primary transition-colors font-medium">
           <Settings className="w-5 h-5" />
           <span>Settings</span>
         </Link>
-        <div className="flex items-center gap-3 px-3 py-3 rounded-xl border border-border bg-brand-surface shadow-sm">
-          <div className="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 font-bold">
-            LS
+        <div className="flex items-center gap-3 p-3 rounded-[16px] bg-[#F2F2F2]">
+          <div className="w-10 h-10 rounded-full bg-[#E8470A] text-white flex items-center justify-center font-bold text-[15px] flex-shrink-0 shadow-sm">
+            DP
           </div>
-          <div className="flex flex-col">
-            <span className="text-sm font-semibold text-text-primary">Delhi Public School</span>
-            <span className="text-xs text-text-secondary">Bokaro Steel City</span>
+          <div className="flex flex-col min-w-0">
+            <span className="text-sm font-bold text-text-primary truncate">Delhi Public School</span>
+            <span className="text-[11px] text-text-secondary truncate">Sector-45, Noida</span>
           </div>
         </div>
       </div>

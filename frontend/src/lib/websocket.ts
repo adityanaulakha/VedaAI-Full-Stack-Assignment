@@ -5,15 +5,26 @@ class WebSocketClient {
   private url: string;
 
   constructor() {
-    this.url = process.env.NEXT_PUBLIC_WS_URL || 'ws://localhost:4000/ws';
+    this.url = 'ws://localhost:4000/ws';
   }
 
+  private currentJobId: string | null = null;
+
   connect(jobId: string) {
+    if (this.ws && this.currentJobId === jobId) {
+      if (this.ws.readyState === WebSocket.OPEN || this.ws.readyState === WebSocket.CONNECTING) {
+        return; // Already connected or connecting to this job
+      }
+    }
+
     if (this.ws) {
       this.ws.close();
     }
 
-    this.ws = new WebSocket(`${this.url}?jobId=${jobId}`);
+    this.currentJobId = jobId;
+    const finalUrl = `${this.url}?jobId=${jobId}`;
+    console.log('Connecting to WebSocket URL:', finalUrl);
+    this.ws = new WebSocket(finalUrl);
 
     this.ws.onopen = () => {
       console.log('🔗 WebSocket connected for job:', jobId);
@@ -50,6 +61,7 @@ class WebSocketClient {
       this.ws.close();
       this.ws = null;
     }
+    this.currentJobId = null;
   }
 }
 

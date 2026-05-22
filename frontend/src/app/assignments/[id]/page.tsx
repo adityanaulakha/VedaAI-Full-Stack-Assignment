@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { useParams, useRouter } from 'next/navigation';
-import { getAssignmentById } from '@/lib/api';
+import { getAssignmentById, regenerateAssignment } from '@/lib/api';
 import { wsClient } from '@/lib/websocket';
 import { useGenerationStore } from '@/store/generationStore';
 import QuestionPaper from '@/components/output/QuestionPaper';
@@ -77,12 +77,8 @@ export default function AssignmentOutputPage() {
   const handleRegenerate = async () => {
     try {
       setIsRegenerating(true);
-      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000'}/api/assignments/${id}/regenerate`, {
-        method: 'POST',
-      });
-      if (!res.ok) throw new Error('Failed to start regeneration');
-      
-      const data = await res.json();
+      const data = await regenerateAssignment(id as string);
+
       
       // Reset store states for new job
       useGenerationStore.setState({
@@ -112,15 +108,7 @@ export default function AssignmentOutputPage() {
 
   return (
     <div className="max-w-4xl mx-auto h-full">
-      {/* Breadcrumb */}
-      <div className="mb-6 hidden md:block">
-        <div className="flex items-center gap-2 text-sm text-text-secondary mb-1">
-          <span>Assignment</span>
-          <span>&gt;</span>
-          <span className="text-brand-primary font-medium">Output</span>
-          <span className="w-1.5 h-1.5 bg-brand-success rounded-full block ml-1"></span>
-        </div>
-      </div>
+      {/* Breadcrumb removed to match design */}
 
       {status === 'error' && (
         <div className="bg-red-50 border border-red-200 p-6 rounded-xl text-center max-w-lg mx-auto mt-20">

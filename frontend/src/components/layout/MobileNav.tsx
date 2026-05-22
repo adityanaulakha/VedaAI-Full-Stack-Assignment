@@ -10,8 +10,6 @@ export default function MobileNav() {
   const navItems = [
     { name: 'Home', href: '/', icon: Home },
     { name: 'Assignments', href: '/assignments', icon: FileText },
-    { name: 'Library', href: '/library', icon: BookOpen },
-    { name: 'AI Toolkit', href: '/toolkit', icon: Wrench },
   ];
 
   return (

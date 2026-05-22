@@ -5,7 +5,7 @@ import { UploadCloud, File as FileIcon, X } from 'lucide-react';
 import { useAssignmentStore } from '@/store/assignmentStore';
 
 export default function FileUploadZone() {
-  const { file, setFile } = useAssignmentStore();
+  const { file, setField } = useAssignmentStore();
   const [isDragging, setIsDragging] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -22,21 +22,21 @@ export default function FileUploadZone() {
     e.preventDefault();
     setIsDragging(false);
     if (e.dataTransfer.files && e.dataTransfer.files.length > 0) {
-      setFile(e.dataTransfer.files[0]);
+      setField('file', e.dataTransfer.files[0]);
     }
   };
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files.length > 0) {
-      setFile(e.target.files[0]);
+      setField('file', e.target.files[0]);
     }
   };
 
   return (
     <div className="mb-8">
       <div 
-        className={`border-2 border-dashed rounded-xl p-8 flex flex-col items-center justify-center transition-colors cursor-pointer ${
-          isDragging ? 'border-brand-primary bg-orange-50' : 'border-border hover:border-text-secondary bg-brand-surface'
+        className={`border-2 border-dashed rounded-[24px] p-10 flex flex-col items-center justify-center transition-colors cursor-pointer ${
+          isDragging ? 'border-[#1a1a1a] bg-gray-50' : 'border-[#CCCCCC] hover:border-text-secondary bg-white'
         }`}
         onDragOver={handleDragOver}
         onDragLeave={handleDragLeave}
@@ -52,7 +52,7 @@ export default function FileUploadZone() {
         />
         
         {file ? (
-          <div className="flex items-center justify-between w-full max-w-sm bg-brand-bg p-4 rounded-lg border border-border">
+          <div className="flex items-center justify-between w-full max-w-sm bg-brand-bg p-4 rounded-xl border border-border">
             <div className="flex items-center gap-3 overflow-hidden">
               <FileIcon className="w-8 h-8 text-brand-primary flex-shrink-0" />
               <div className="truncate">
@@ -62,7 +62,7 @@ export default function FileUploadZone() {
             </div>
             <button 
               type="button"
-              onClick={(e) => { e.stopPropagation(); setFile(null); }}
+              onClick={(e) => { e.stopPropagation(); setField('file', null); }}
               className="p-1 text-text-secondary hover:text-brand-danger transition-colors"
             >
               <X className="w-5 h-5" />
@@ -70,19 +70,19 @@ export default function FileUploadZone() {
           </div>
         ) : (
           <>
-            <div className="w-16 h-16 bg-brand-bg rounded-full flex items-center justify-center mb-4">
-              <UploadCloud className="w-8 h-8 text-text-secondary" />
+            <div className="mb-4">
+              <UploadCloud className="w-12 h-12 text-[#999999]" />
             </div>
-            <p className="text-text-primary font-semibold mb-1 text-center">Choose a file or drag & drop it here</p>
-            <p className="text-text-secondary text-sm mb-4 text-center">JPEG, PNG, PDF upto 10MB</p>
-            <button type="button" className="px-6 py-2 border border-border rounded-lg text-sm font-medium hover:bg-brand-bg transition-colors">
+            <p className="text-[#1A1A1A] font-extrabold text-lg mb-1 text-center">Choose a file or drag & drop it here</p>
+            <p className="text-[#8C8C8C] text-[13px] mb-6 text-center">JPEG, PNG, upto 10MB</p>
+            <button type="button" className="px-6 py-2.5 border-none bg-[#F2F2F2] rounded-full text-[13px] font-bold text-text-primary hover:bg-[#e6e6e6] transition-colors">
               Browse Files
             </button>
           </>
         )}
       </div>
       {!file && (
-        <p className="text-text-secondary text-xs mt-2 text-center">
+        <p className="text-[#8C8C8C] text-[13px] mt-3 text-center">
           Upload images of your preferred document/image (Optional)
         </p>
       )}
