@@ -66,7 +66,7 @@ export default function AssignmentOutputPage() {
         pagebreak: { mode: 'css', avoid: '.print\\:break-inside-avoid' }
       };
 
-      await html2pdf().set(opt).from(element).save();
+      await html2pdf().set(opt as any).from(element).save();
     } catch (error) {
       console.error('Error generating PDF:', error);
       alert('Failed to generate PDF. Please try again.');
