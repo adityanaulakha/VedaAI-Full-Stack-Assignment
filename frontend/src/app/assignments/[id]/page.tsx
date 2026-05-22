@@ -58,11 +58,12 @@ export default function AssignmentOutputPage() {
 
       // Add a wrapper to ensure specific width for consistent PDF output
       const opt = {
-        margin: [10, 10, 10, 10],
+        margin: 10,
         filename: `${result?.paperTitle || 'assignment'}.pdf`,
         image: { type: 'jpeg', quality: 0.98 },
         html2canvas: { scale: 2, useCORS: true, logging: false },
-        jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+        jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
+        pagebreak: { mode: 'css', avoid: '.print\\:break-inside-avoid' }
       };
 
       await html2pdf().set(opt).from(element).save();
