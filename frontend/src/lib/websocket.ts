@@ -5,7 +5,7 @@ class WebSocketClient {
   private url: string;
 
   constructor() {
-    this.url = 'ws://localhost:4000/ws';
+    this.url = process.env.NEXT_PUBLIC_WS_URL || 'ws://localhost:4000/ws';
   }
 
   private currentJobId: string | null = null;
