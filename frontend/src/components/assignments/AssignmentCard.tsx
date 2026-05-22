@@ -24,10 +24,10 @@ export default function AssignmentCard({ assignment, onDelete }: AssignmentCardP
   };
 
   return (
-    <div className="bg-white rounded-[32px] p-8 shadow-sm border border-transparent hover:border-border hover:shadow-md transition-all relative">
-      <div className="flex justify-between items-start mb-16">
+    <div className="bg-white rounded-[24px] lg:rounded-[32px] p-5 lg:p-8 shadow-sm border border-transparent hover:border-border hover:shadow-md transition-all relative">
+      <div className="flex justify-between items-start mb-6 lg:mb-16">
         <Link href={`/assignments/${assignment._id}`} className="hover:text-brand-primary transition-colors flex-1 pr-4">
-          <h3 className="text-[22px] font-extrabold text-text-primary tracking-tight leading-tight">
+          <h3 className="text-[18px] lg:text-[22px] font-extrabold text-text-primary tracking-tight leading-tight">
             {assignment.title}
           </h3>
         </Link>
@@ -36,7 +36,7 @@ export default function AssignmentCard({ assignment, onDelete }: AssignmentCardP
             onClick={() => setShowMenu(!showMenu)}
             className="p-1 text-[#b3b3b3] hover:text-text-primary hover:bg-brand-bg rounded-full transition-colors"
           >
-            <MoreVertical className="w-6 h-6" />
+            <MoreVertical className="w-5 h-5 lg:w-6 lg:h-6" />
           </button>
           
           {showMenu && (
@@ -61,7 +61,7 @@ export default function AssignmentCard({ assignment, onDelete }: AssignmentCardP
         </div>
       </div>
 
-      <div className="flex justify-between items-center text-[13px]">
+      <div className="flex justify-between items-center text-[11px] lg:text-[13px]">
         <div>
           <span className="font-extrabold text-text-primary">Assigned on : </span>
           <span className="font-semibold text-[#8C8C8C]">{formatDate(assignment.assignedOn)}</span>

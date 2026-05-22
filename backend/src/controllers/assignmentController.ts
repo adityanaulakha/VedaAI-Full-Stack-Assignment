@@ -5,13 +5,14 @@ import { enqueueGenerationJob } from '../services/jobService';
 
 export const createAssignment = async (req: Request, res: Response) => {
   try {
-    const { title, subject, className, topic, dueDate, questionTypes, additionalInfo, fileContent } = req.body;
+    const { title, subject, className, topic, examType, dueDate, questionTypes, additionalInfo, fileContent } = req.body;
 
     const newAssignment = new Assignment({
       title: title || `${subject} Assessment`,
       subject,
       className,
       topic,
+      examType,
       dueDate,
       questionTypes,
       additionalInfo,
@@ -55,6 +56,7 @@ export const regenerateAssignment = async (req: Request, res: Response) => {
       subject: assignment.subject,
       className: assignment.className,
       topic: assignment.topic,
+      examType: assignment.examType,
       questionTypes: assignment.questionTypes,
       additionalInfo: assignment.additionalInfo,
       fileContent: assignment.fileContent,

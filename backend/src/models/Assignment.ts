@@ -11,6 +11,7 @@ export interface IAssignment extends Document {
   subject: string;
   className: string;
   topic?: string;
+  examType?: string;
   dueDate: Date;
   questionTypes: IQuestionType[];
   additionalInfo?: string;
@@ -31,6 +32,7 @@ const AssignmentSchema = new Schema<IAssignment>({
   subject: { type: String, required: true },
   className: { type: String, required: true },
   topic: { type: String },
+  examType: { type: String },
   dueDate: { type: Date, required: true },
   questionTypes: [QuestionTypeSchema],
   additionalInfo: { type: String },

@@ -10,6 +10,7 @@ export const GenerationSchema = z.object({
   paperTitle: z.string(),
   subject: z.string(),
   className: z.string(),
+  examType: z.string().optional(),
   timeAllowed: z.number(),
   totalMarks: z.number(),
   sections: z.array(
@@ -61,6 +62,7 @@ const generateMockData = (params: any) => {
     paperTitle: title || `${subject} Assessment`,
     subject,
     className,
+    examType: params.examType,
     timeAllowed: 180, // Default 3 hours
     totalMarks,
     sections,
@@ -83,7 +85,8 @@ export const generateQuestions = async (params: any, retryError?: string): Promi
   const systemPrompt = `You are an expert educational assessment designer for Indian schools following CBSE/NCERT curriculum. You create well-structured, pedagogically appropriate question papers. Respond ONLY with valid JSON. No markdown, no code fences, no explanation, no preamble. Just the raw JSON object.`;
 
   let userPrompt = `Generate a complete question paper with these specifications:
-School: Delhi Public School, Bokaro Steel City
+School: Delhi Public School, Sector-45, Noida
+Assessment Title: ${params.title}
 Subject: ${params.subject}
 Class: ${params.className}
 Topic/Chapter: ${params.topic || 'General'}
@@ -100,7 +103,7 @@ Include complete answers in the answer key.
 
 Return this exact JSON structure:
 {
-  "paperTitle": "string",
+  "paperTitle": "string", // Must be exactly the Assessment Title without the school name and WITHOUT any academic year (e.g., remove 2023-24)
   "subject": "string",
   "className": "string",
   "timeAllowed": number,
@@ -172,5 +175,6 @@ Return this exact JSON structure:
   }
 
   const parsed = JSON.parse(jsonMatch[0]);
+  parsed.examType = params.examType;
   return GenerationSchema.parse(parsed); // Throws ZodError if invalid
 };

@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 import Step1Form from './Step1Form';
 import Step2Form from './Step2Form';
 import { useAssignmentStore } from '@/store/assignmentStore';
@@ -18,8 +19,8 @@ export default function CreateForm() {
 
   const handleNext = () => {
     // Basic validation for Step 1
-    if (!store.title || !store.subject || !store.className) {
-      setError('Please fill in all required fields (Title, Subject, Class).');
+    if (!store.subject || !store.className || !store.examType) {
+      setError('Please fill in all required fields (Subject, Class, Examination Type).');
       return;
     }
     setError(null);
@@ -65,10 +66,11 @@ export default function CreateForm() {
     try {
       // Create formData if file exists
       const payload = {
-        title: store.title,
+        title: `${store.examType} - ${store.subject}`,
         subject: store.subject,
         className: store.className,
         topic: store.topic,
+        examType: store.examType,
         dueDate: store.dueDate,
         questionTypes: store.questionTypes.map(qt => ({ type: qt.type, count: qt.count, marks: qt.marks })),
         additionalInfo: store.additionalInfo,
@@ -93,25 +95,37 @@ export default function CreateForm() {
   };
 
   return (
-    <div className="max-w-3xl mx-auto pb-32">
-      {/* Title */}
-      <div className="mb-6">
+    <div className="max-w-3xl mx-auto pb-32 px-2 lg:px-0">
+      {/* Mobile Header */}
+      <div className="lg:hidden flex items-center mb-6 mt-2">
+        <Link href="/assignments">
+          <button className="w-10 h-10 bg-[#e5e5e5] rounded-full flex items-center justify-center mr-4">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M19 12H5"/><path d="M12 19l-7-7 7-7"/></svg>
+          </button>
+        </Link>
+        <h1 className="text-[16px] font-extrabold text-text-primary flex-1 text-center pr-14">
+          Create Assignment
+        </h1>
+      </div>
+
+      {/* Desktop Title */}
+      <div className="hidden lg:block mb-6">
         <h1 className="text-[28px] font-extrabold text-text-primary">Create Assignment</h1>
         <p className="text-[#8C8C8C] text-[15px] mt-1">Set up a new assignment for your students.</p>
       </div>
 
       {/* Progress Bar */}
-      <div className="flex gap-2 mb-8">
-        <div className={`h-2 flex-1 rounded-full transition-colors ${store.currentStep >= 1 ? 'bg-[#1a1a1a]' : 'bg-[#e5e5e5]'}`} />
-        <div className={`h-2 flex-1 rounded-full transition-colors ${store.currentStep >= 2 ? 'bg-[#1a1a1a]' : 'bg-[#e5e5e5]'}`} />
+      <div className="flex gap-2 mb-6 lg:mb-8">
+        <div className={`h-1.5 lg:h-2 flex-1 rounded-full transition-colors ${store.currentStep >= 1 ? 'bg-[#1a1a1a]' : 'bg-[#e5e5e5]'}`} />
+        <div className={`h-1.5 lg:h-2 flex-1 rounded-full transition-colors ${store.currentStep >= 2 ? 'bg-[#1a1a1a]' : 'bg-[#e5e5e5]'}`} />
       </div>
 
-      <div className="bg-white rounded-[32px] shadow-sm p-8 md:p-10 relative">
-        <div className="mb-8 border-b border-border pb-6">
-          <h2 className="text-xl font-bold text-text-primary">
+      <div className="bg-white rounded-[24px] lg:rounded-[32px] shadow-sm p-6 lg:p-10 relative">
+        <div className="mb-6 lg:mb-8 border-b border-border pb-4 lg:pb-6">
+          <h2 className="text-[18px] lg:text-xl font-bold text-text-primary">
             {store.currentStep === 1 ? 'Assignment Setup' : 'Assignment Details'}
           </h2>
-          <p className="text-text-secondary text-sm mt-1">
+          <p className="text-[#8c8c8c] text-[13px] lg:text-sm mt-1">
             {store.currentStep === 1 ? 'Basic configuration for the assignment' : 'Basic information about your assignment'}
           </p>
         </div>
@@ -126,12 +140,12 @@ export default function CreateForm() {
 
           {store.currentStep === 1 ? <Step1Form /> : <Step2Form />}
 
-          <div className="fixed bottom-8 left-[calc(50%+140px)] -translate-x-1/2 flex items-center gap-4 z-40 bg-[#F2F2F2]/80 backdrop-blur-md p-2 rounded-full shadow-lg border border-white/20">
+          <div className="fixed bottom-24 lg:bottom-8 left-1/2 lg:left-[calc(50%+140px)] -translate-x-1/2 flex items-center gap-2 z-40 bg-transparent lg:bg-[#F2F2F2]/80 lg:backdrop-blur-md lg:p-2 lg:rounded-full lg:shadow-lg lg:border lg:border-white/20 w-max justify-center">
             {store.currentStep === 2 ? (
               <button 
                 type="button" 
                 onClick={handlePrevious}
-                className="px-6 py-3.5 rounded-full bg-white text-text-primary font-bold shadow-sm hover:bg-gray-50 transition-colors"
+                className="px-5 py-3 lg:px-6 lg:py-3.5 rounded-full bg-white text-[#1a1a1a] font-medium shadow-sm lg:shadow-none hover:bg-gray-50 transition-colors flex items-center justify-center whitespace-nowrap text-[14px]"
                 disabled={isSubmitting}
               >
                 ← Previous
@@ -142,7 +156,7 @@ export default function CreateForm() {
               <button 
                 type="button" 
                 onClick={handleNext}
-                className="px-8 py-3.5 rounded-full bg-[#1a1a1a] text-white font-bold shadow-md hover:bg-black transition-colors"
+                className="px-6 py-3 lg:px-8 lg:py-3.5 rounded-full bg-[#1a1a1a] text-white font-medium shadow-sm hover:bg-black transition-colors flex items-center justify-center whitespace-nowrap text-[14px]"
               >
                 Next →
               </button>
@@ -150,7 +164,7 @@ export default function CreateForm() {
               <button 
                 type="submit" 
                 disabled={isSubmitting}
-                className="px-8 py-3.5 rounded-full bg-[#1a1a1a] text-white font-bold shadow-md hover:bg-black transition-colors flex items-center gap-2 disabled:opacity-70"
+                className="px-6 py-3 lg:px-8 lg:py-3.5 rounded-full bg-[#1a1a1a] text-white font-medium shadow-sm hover:bg-black transition-colors flex items-center justify-center gap-2 whitespace-nowrap disabled:opacity-70 text-[14px]"
               >
                 {isSubmitting ? (
                   <>

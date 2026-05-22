@@ -35,33 +35,79 @@ export default function QuestionTypeRow({ qt }: QuestionTypeRowProps) {
   };
 
   return (
-    <div className="flex flex-col md:flex-row md:items-center gap-3 py-1 group">
-      {/* Dropdown */}
-      <div className="relative flex-1 bg-white border border-border rounded-full px-5 py-3 shadow-sm">
-        <select 
-          value={qt.type}
-          onChange={handleTypeChange}
-          className="w-full appearance-none bg-transparent outline-none text-[14px] text-text-primary font-medium pr-8 cursor-pointer"
+    <div className="bg-white border border-border md:border-transparent md:bg-transparent rounded-[24px] p-4 md:p-0 shadow-sm md:shadow-none mb-2 md:mb-0 md:flex md:flex-row md:items-center md:gap-4 md:py-1 group">
+      {/* Top row: Dropdown and Remove Button */}
+      <div className="flex items-center justify-between gap-3 mb-4 md:mb-0 md:flex-1">
+        <div className="relative flex-1 bg-white md:border md:border-border rounded-full px-1 md:px-5 py-1 md:py-3 md:shadow-sm">
+          <select 
+            value={qt.type}
+            onChange={handleTypeChange}
+            className="w-full appearance-none bg-transparent outline-none text-[14px] text-text-primary font-bold md:font-medium pr-8 cursor-pointer"
+          >
+            {QUESTION_TYPES.map(type => (
+              <option key={type} value={type}>{type}</option>
+            ))}
+          </select>
+          <ChevronDown className="w-4 h-4 text-text-secondary absolute right-2 md:right-4 top-1/2 -translate-y-1/2 pointer-events-none" />
+        </div>
+
+        <button 
+          type="button"
+          onClick={() => removeQuestionType(qt.id)}
+          disabled={questionTypes.length === 1}
+          className="flex md:hidden items-center justify-center p-2 text-text-secondary hover:text-brand-danger hover:bg-red-50 rounded-full transition-colors disabled:opacity-30 disabled:cursor-not-allowed"
         >
-          {QUESTION_TYPES.map(type => (
-            <option key={type} value={type}>{type}</option>
-          ))}
-        </select>
-        <ChevronDown className="w-4 h-4 text-text-secondary absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none" />
+          <X className="w-4 h-4" />
+        </button>
       </div>
 
-      {/* Remove Button */}
-      <button 
-        type="button"
-        onClick={() => removeQuestionType(qt.id)}
-        disabled={questionTypes.length === 1}
-        className="mx-1 flex items-center justify-center p-2 text-text-secondary hover:text-brand-danger hover:bg-red-50 rounded-full transition-colors disabled:opacity-30 disabled:cursor-not-allowed"
-      >
-        <X className="w-4 h-4" />
-      </button>
+      {/* Bottom row: Steppers inside a gray box on mobile, or just inline on desktop */}
+      <div className="md:hidden bg-[#F9F9F9] rounded-[20px] p-3 flex gap-3">
+        <div className="flex-1 flex flex-col items-center gap-2">
+          <span className="text-[11px] font-bold text-text-primary">No. of Questions</span>
+          <div className="flex items-center justify-between bg-white rounded-full p-1.5 shadow-sm w-full">
+            <button 
+              type="button"
+              onClick={() => handleCountChange(-1)}
+              className="w-7 h-7 flex items-center justify-center text-[#B3B3B3] hover:text-text-primary rounded-full transition-colors"
+            >
+              <Minus className="w-4 h-4" />
+            </button>
+            <span className="font-extrabold text-[14px] text-text-primary">{qt.count}</span>
+            <button 
+              type="button"
+              onClick={() => handleCountChange(1)}
+              className="w-7 h-7 flex items-center justify-center text-[#B3B3B3] hover:text-text-primary rounded-full transition-colors"
+            >
+              <Plus className="w-4 h-4" />
+            </button>
+          </div>
+        </div>
+        
+        <div className="flex-1 flex flex-col items-center gap-2">
+          <span className="text-[11px] font-bold text-text-primary">Marks</span>
+          <div className="flex items-center justify-between bg-white rounded-full p-1.5 shadow-sm w-full">
+            <button 
+              type="button"
+              onClick={() => handleMarksChange(-1)}
+              className="w-7 h-7 flex items-center justify-center text-[#B3B3B3] hover:text-text-primary rounded-full transition-colors"
+            >
+              <Minus className="w-4 h-4" />
+            </button>
+            <span className="font-extrabold text-[14px] text-text-primary">{qt.marks}</span>
+            <button 
+              type="button"
+              onClick={() => handleMarksChange(1)}
+              className="w-7 h-7 flex items-center justify-center text-[#B3B3B3] hover:text-text-primary rounded-full transition-colors"
+            >
+              <Plus className="w-4 h-4" />
+            </button>
+          </div>
+        </div>
+      </div>
 
-      <div className="flex items-center gap-4 w-full md:w-auto">
-        {/* Count Stepper */}
+      {/* Desktop Steppers */}
+      <div className="hidden md:flex items-center gap-4 w-auto">
         <div className="flex items-center justify-between bg-white border border-border rounded-full p-1 shadow-sm w-24">
           <button 
             type="button"
@@ -80,7 +126,6 @@ export default function QuestionTypeRow({ qt }: QuestionTypeRowProps) {
           </button>
         </div>
 
-        {/* Marks Stepper */}
         <div className="flex items-center justify-between bg-white border border-border rounded-full p-1 shadow-sm w-20">
           <button 
             type="button"
@@ -98,6 +143,15 @@ export default function QuestionTypeRow({ qt }: QuestionTypeRowProps) {
             <Plus className="w-4 h-4" />
           </button>
         </div>
+
+        <button 
+          type="button"
+          onClick={() => removeQuestionType(qt.id)}
+          disabled={questionTypes.length === 1}
+          className="flex items-center justify-center p-2 text-text-secondary hover:text-brand-danger hover:bg-red-50 rounded-full transition-colors disabled:opacity-30 disabled:cursor-not-allowed"
+        >
+          <X className="w-4 h-4" />
+        </button>
       </div>
     </div>
   );

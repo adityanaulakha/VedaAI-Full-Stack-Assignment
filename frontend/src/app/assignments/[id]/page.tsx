@@ -30,7 +30,7 @@ export default function AssignmentOutputPage() {
       const data = await getAssignmentById(id);
       
       if (data.assignment.status === 'completed' && data.result) {
-        setResult(data.result);
+        setResult({ ...data.result, examType: data.assignment.examType, topic: data.assignment.topic });
       } else if (data.assignment.status === 'failed') {
         setError('Assignment generation failed previously.');
       } else if (data.assignment.jobId) {

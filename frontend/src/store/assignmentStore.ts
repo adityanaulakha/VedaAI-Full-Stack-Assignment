@@ -12,6 +12,7 @@ interface AssignmentState {
   subject: string;
   className: string;
   topic: string;
+  examType: string;
   dueDate: string;
   questionTypes: QuestionType[];
   additionalInfo: string;
@@ -30,6 +31,7 @@ export const useAssignmentStore = create<AssignmentState>((set) => ({
   subject: '',
   className: '',
   topic: '',
+  examType: '',
   dueDate: '',
   questionTypes: [{ id: '1', type: 'Multiple Choice Questions', count: 1, marks: 1 }],
   additionalInfo: '',
@@ -55,6 +57,7 @@ export const useAssignmentStore = create<AssignmentState>((set) => ({
     subject: '',
     className: '',
     topic: '',
+    examType: '',
     dueDate: '',
     questionTypes: [{ id: '1', type: 'Multiple Choice Questions', count: 1, marks: 1 }],
     additionalInfo: '',

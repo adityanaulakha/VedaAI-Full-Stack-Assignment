@@ -18,19 +18,8 @@ export default function Step1Form() {
 
   return (
     <div className="space-y-8">
-      <div>
-        <label className="block text-sm font-extrabold text-text-primary mb-3">Assignment Title <span className="text-[#EF4444]">*</span></label>
-        <input 
-          type="text" 
-          value={title}
-          onChange={(e) => setField('title', e.target.value)}
-          placeholder="e.g. Mid-term Science Assessment" 
-          className="w-full px-5 py-4 rounded-[16px] border border-border bg-white text-text-primary font-medium focus:outline-none focus:ring-2 focus:ring-[#1a1a1a] transition-shadow shadow-sm"
-          required
-        />
-      </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
         <div>
           <label className="block text-sm font-extrabold text-text-primary mb-3">Class <span className="text-[#EF4444]">*</span></label>
           <div className="relative">
@@ -72,15 +61,39 @@ export default function Step1Form() {
         </div>
       </div>
 
-      <div>
-        <label className="block text-sm font-extrabold text-text-primary mb-3">Topic / Chapter <span className="text-[#8C8C8C] font-medium ml-1">(Optional)</span></label>
-        <input 
-          type="text" 
-          value={topic}
-          onChange={(e) => setField('topic', e.target.value)}
-          placeholder="e.g. Thermodynamics, Algebra" 
-          className="w-full px-5 py-4 rounded-[16px] border border-border bg-white text-text-primary font-medium focus:outline-none focus:ring-2 focus:ring-[#1a1a1a] transition-shadow shadow-sm"
-        />
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+        <div>
+          <label className="block text-sm font-extrabold text-text-primary mb-3">Topic / Chapter <span className="text-[#8C8C8C] font-medium ml-1">(Optional)</span></label>
+          <input 
+            type="text" 
+            value={topic}
+            onChange={(e) => setField('topic', e.target.value)}
+            placeholder="e.g. Thermodynamics, Algebra" 
+            className="w-full px-5 py-4 rounded-[16px] border border-border bg-white text-text-primary font-medium focus:outline-none focus:ring-2 focus:ring-[#1a1a1a] transition-shadow shadow-sm"
+          />
+        </div>
+
+        <div>
+          <label className="block text-sm font-extrabold text-text-primary mb-3">Examination Type <span className="text-[#EF4444]">*</span></label>
+          <div className="relative">
+            <select 
+              value={useAssignmentStore(state => state.examType)}
+              onChange={(e) => setField('examType', e.target.value)}
+              className="w-full px-5 py-4 rounded-[16px] border border-border bg-white text-text-primary font-medium focus:outline-none focus:ring-2 focus:ring-[#1a1a1a] appearance-none shadow-sm cursor-pointer"
+              required
+            >
+              <option value="" disabled>Select Type</option>
+              <option value="Quarterly">Quarterly</option>
+              <option value="Half-yearly">Half-yearly</option>
+              <option value="Final Exams">Final Exams</option>
+            </select>
+            <div className="pointer-events-none absolute inset-y-0 right-5 flex items-center text-[#8C8C8C]">
+              <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+              </svg>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   );

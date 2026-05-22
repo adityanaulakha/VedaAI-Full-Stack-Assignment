@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from 'react';
 import { Calendar, Plus, Mic } from 'lucide-react';
 import FileUploadZone from './FileUploadZone';
 import QuestionTypeRow from './QuestionTypeRow';
@@ -7,6 +8,37 @@ import { useAssignmentStore } from '@/store/assignmentStore';
 
 export default function Step2Form() {
   const { dueDate, questionTypes, addQuestionType, additionalInfo, setField } = useAssignmentStore();
+  const [isRecording, setIsRecording] = useState(false);
+
+  const startRecording = () => {
+    if (!('webkitSpeechRecognition' in window) && !('SpeechRecognition' in window)) {
+      alert('Speech recognition is not supported in this browser.');
+      return;
+    }
+
+    const SpeechRecognition = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
+    const recognition = new SpeechRecognition();
+
+    recognition.continuous = false;
+    recognition.interimResults = false;
+    recognition.lang = 'en-US';
+
+    recognition.onstart = () => setIsRecording(true);
+    
+    recognition.onresult = (event: any) => {
+      const transcript = event.results[0][0].transcript;
+      setField('additionalInfo', additionalInfo ? `${additionalInfo} ${transcript}` : transcript);
+    };
+
+    recognition.onerror = (event: any) => {
+      console.error('Speech recognition error', event.error);
+      setIsRecording(false);
+    };
+
+    recognition.onend = () => setIsRecording(false);
+
+    recognition.start();
+  };
 
   const totalQuestions = questionTypes.reduce((acc, qt) => acc + qt.count, 0);
   const totalMarks = questionTypes.reduce((acc, qt) => acc + (qt.count * qt.marks), 0);
@@ -19,11 +51,17 @@ export default function Step2Form() {
         <label className="block text-[14px] font-extrabold text-text-primary mb-3">Due Date</label>
         <div className="relative">
           <input 
-            type="text" 
-            placeholder="DD-MM-YYYY"
+            type="date" 
             value={dueDate}
             onChange={(e) => setField('dueDate', e.target.value)}
-            className="w-full px-5 py-3.5 rounded-full border border-border bg-[#F9F9F9] text-text-primary text-[14px] font-medium focus:outline-none focus:ring-2 focus:ring-[#1a1a1a] transition-shadow shadow-sm"
+            onClick={(e) => {
+              try {
+                if ('showPicker' in HTMLInputElement.prototype) {
+                  e.currentTarget.showPicker();
+                }
+              } catch (err) {}
+            }}
+            className="w-full px-5 py-3.5 rounded-full border border-border bg-[#F9F9F9] text-text-primary text-[14px] font-medium focus:outline-none focus:ring-2 focus:ring-[#1a1a1a] transition-shadow shadow-sm [&::-webkit-calendar-picker-indicator]:opacity-0 [&::-webkit-calendar-picker-indicator]:absolute [&::-webkit-calendar-picker-indicator]:top-0 [&::-webkit-calendar-picker-indicator]:right-0 [&::-webkit-calendar-picker-indicator]:w-full [&::-webkit-calendar-picker-indicator]:h-full [&::-webkit-calendar-picker-indicator]:cursor-pointer"
             required
           />
           <Calendar className="w-5 h-5 text-text-secondary absolute right-5 top-1/2 -translate-y-1/2 pointer-events-none" />
@@ -36,8 +74,10 @@ export default function Step2Form() {
             <label className="block text-[14px] font-extrabold text-text-primary">Question Type</label>
           </div>
           <div className="hidden md:flex items-center gap-4 text-[13px] text-text-primary font-bold">
-            <span className="w-24 text-center">No. of Questions</span>
+            <span className="w-24 text-center leading-tight">No. of<br/>Questions</span>
             <span className="w-20 text-center">Marks</span>
+            {/* Spacer to perfectly align with the X button in the rows below */}
+            <div className="w-8"></div>
           </div>
         </div>
 
@@ -75,7 +115,16 @@ export default function Step2Form() {
             placeholder="e.g Generate a question paper for 3 hour exam duration..."
             className="w-full h-[120px] px-6 py-5 rounded-[24px] border-2 border-dashed border-border bg-[#F9F9F9] text-text-primary text-[14px] font-medium focus:outline-none focus:ring-2 focus:ring-[#1a1a1a] resize-none transition-shadow"
           />
-          <button type="button" className="absolute bottom-5 right-5 w-8 h-8 flex items-center justify-center bg-[#E5E5E5] rounded-full text-text-primary hover:bg-[#d4d4d4] transition-colors shadow-sm">
+          <button 
+            type="button" 
+            onClick={startRecording}
+            className={`absolute bottom-5 right-5 w-8 h-8 flex items-center justify-center rounded-full transition-colors shadow-sm ${
+              isRecording 
+                ? 'bg-red-500 text-white animate-pulse' 
+                : 'bg-[#E5E5E5] text-text-primary hover:bg-[#d4d4d4]'
+            }`}
+            title={isRecording ? "Listening..." : "Click to speak"}
+          >
             <Mic className="w-4 h-4" />
           </button>
         </div>

@@ -21,6 +21,7 @@ export interface IGenerationResult extends Document {
   paperTitle: string;
   subject: string;
   className: string;
+  examType?: string;
   timeAllowed: number;
   totalMarks: number;
   sections: ISection[];
@@ -48,6 +49,7 @@ const GenerationResultSchema = new Schema<IGenerationResult>({
   paperTitle: { type: String, required: true },
   subject: { type: String, required: true },
   className: { type: String, required: true },
+  examType: { type: String },
   timeAllowed: { type: Number, required: true },
   totalMarks: { type: Number, required: true },
   sections: [SectionSchema],

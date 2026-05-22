@@ -7,6 +7,7 @@ export const enqueueGenerationJob = async (
     subject: string;
     className: string;
     topic?: string;
+    examType?: string;
     questionTypes: any[];
     additionalInfo?: string;
     fileContent?: string;
