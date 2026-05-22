@@ -1,0 +1,29 @@
+@import "tailwindcss";
+
+@theme {
+  --color-brand-primary: #E8470A;
+  --color-brand-success: #22C55E;
+  --color-brand-danger: #EF4444;
+  --color-brand-bg: #F2F2F2;
+  --color-brand-surface: #FFFFFF;
+  --color-text-primary: #1A1A1A;
+  --color-text-secondary: #6B6B6B;
+  --color-border: #E5E5E5;
+}
+
+@layer base {
+  body {
+    background-color: var(--color-brand-bg);
+    color: var(--color-text-primary);
+  }
+}
+
+.hide-badges .badge-wrapper {
+  display: none !important;
+}
+
+@media print {
+  .badge-wrapper {
+    display: none !important;
+  }
+}
