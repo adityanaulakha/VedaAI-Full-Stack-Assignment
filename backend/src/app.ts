@@ -4,21 +4,8 @@ import assignmentRoutes from './routes/assignments';
 
 const app = express();
 
-const allowedOrigins = [
-  'http://localhost:3000',
-  'http://localhost:3001',
-  process.env.FRONTEND_URL,
-].filter(Boolean) as string[];
-
-app.use(cors({
-  origin: function (origin: string | undefined, callback: (err: Error | null, allow?: boolean) => void) {
-    if (!origin || allowedOrigins.includes(origin)) {
-      callback(null, true);
-    } else {
-      callback(new Error('Not allowed by CORS'));
-    }
-  }
-}));
+// Allow all origins for the sake of the assignment and easy deployment
+app.use(cors());
 
 app.use(express.json({ limit: '10mb' }));
 
