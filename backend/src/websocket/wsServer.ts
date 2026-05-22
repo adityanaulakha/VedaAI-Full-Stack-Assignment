@@ -1,5 +1,5 @@
 import { WebSocketServer, WebSocket } from 'ws';
-import { Server } from 'http';
+import { Server, IncomingMessage } from 'http';
 
 // Store clients mapped to their requested jobId rooms
 const rooms = new Map<string, Set<WebSocket>>();
@@ -14,7 +14,7 @@ export const setupWebSocketServer = (server: Server) => {
   const wss = new WebSocketServer({ 
     server, 
     path: '/ws',
-    verifyClient: (info, cb) => {
+    verifyClient: (info: { origin: string; secure: boolean; req: IncomingMessage }, cb: (res: boolean, code?: number, message?: string) => void) => {
       cb(true);
     }
   });
@@ -23,7 +23,7 @@ export const setupWebSocketServer = (server: Server) => {
     console.log('Backend received HTTP Upgrade request for:', request.url);
   });
 
-  wss.on('connection', (ws: WebSocket, req) => {
+  wss.on('connection', (ws: WebSocket, req: IncomingMessage) => {
     // Parse URL to get jobId: ws://localhost:4000/ws?jobId=XXX
     const url = new URL(req.url || '', `http://${req.headers.host}`);
     const jobId = url.searchParams.get('jobId');
