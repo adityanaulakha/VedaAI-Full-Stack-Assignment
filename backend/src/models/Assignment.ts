@@ -15,7 +15,7 @@ export interface IAssignment extends Document {
   questionTypes: IQuestionType[];
   additionalInfo?: string;
   fileContent?: string;
-  status: 'pending' | 'processing' | 'completed' | 'failed';
+  status: 'queued' | 'processing' | 'completed' | 'failed';
   assignedOn: Date;
   jobId?: string;
 }
@@ -35,7 +35,7 @@ const AssignmentSchema = new Schema<IAssignment>({
   questionTypes: [QuestionTypeSchema],
   additionalInfo: { type: String },
   fileContent: { type: String }, // Can store basic text from file if needed
-  status: { type: String, enum: ['pending', 'processing', 'completed', 'failed'], default: 'pending' },
+  status: { type: String, enum: ['queued', 'processing', 'completed', 'failed'], default: 'queued' },
   assignedOn: { type: Date, default: Date.now },
   jobId: { type: String },
 });

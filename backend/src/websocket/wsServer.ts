@@ -15,13 +15,12 @@ export const setupWebSocketServer = (server: Server) => {
     server, 
     path: '/ws',
     verifyClient: (info, cb) => {
-      const origin = info.req.headers.origin;
-      if (!origin || allowedOrigins.includes(origin)) {
-        cb(true);
-      } else {
-        cb(false, 403, 'Not allowed by CORS');
-      }
+      cb(true);
     }
+  });
+
+  server.on('upgrade', (request, socket, head) => {
+    console.log('Backend received HTTP Upgrade request for:', request.url);
   });
 
   wss.on('connection', (ws: WebSocket, req) => {

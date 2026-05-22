@@ -23,3 +23,8 @@ export const deleteAssignment = async (id: string) => {
   const response = await api.delete(`/assignments/${id}`);
   return response.data;
 };
+
+export const regenerateAssignment = async (id: string) => {
+  const response = await api.post(`/assignments/${id}/regenerate`);
+  return response.data;
+};

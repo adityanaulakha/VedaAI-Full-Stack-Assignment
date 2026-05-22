@@ -33,7 +33,7 @@ export const GenerationSchema = z.object({
 
 const generateMockData = (params: any) => {
   const { title, subject, className, questionTypes } = params;
-  
+
   let totalMarks = 0;
   const sections = questionTypes.map((qt: any, index: number) => {
     const sectionId = String.fromCharCode(65 + index); // A, B, C...
@@ -133,7 +133,7 @@ Return this exact JSON structure:
   if (aiProvider === 'gemini') {
     const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
     const response = await ai.models.generateContent({
-      model: 'gemini-2.5-flash',
+      model: 'gemini-3-flash-preview',
       contents: [
         { role: 'user', parts: [{ text: systemPrompt + '\n\n' + userPrompt }] }
       ]
@@ -142,7 +142,7 @@ Return this exact JSON structure:
   } else if (aiProvider === 'openai') {
     const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
     const response = await openai.chat.completions.create({
-      model: 'gpt-4o',
+      model: 'gpt-5.5',
       messages: [
         { role: 'system', content: systemPrompt },
         { role: 'user', content: userPrompt }
@@ -153,7 +153,7 @@ Return this exact JSON structure:
   } else if (aiProvider === 'anthropic') {
     const anthropic = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
     const response = await anthropic.messages.create({
-      model: 'claude-3-5-sonnet-20241022',
+      model: 'claude-4.5-sonnet',
       max_tokens: 4000,
       system: systemPrompt,
       messages: [
@@ -164,7 +164,7 @@ Return this exact JSON structure:
   } else {
     throw new Error(`Unsupported AI provider: ${aiProvider}`);
   }
-  
+
   // Extract JSON if model wrapped it in markdown
   const jsonMatch = content.match(/\{[\s\S]*\}/);
   if (!jsonMatch) {
