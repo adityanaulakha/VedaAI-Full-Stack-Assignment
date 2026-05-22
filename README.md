@@ -29,7 +29,31 @@ The project is built using a modern, scalable stack, separated into a distinct f
 - **Regenerate Functionality:** Easily re-trigger AI generation if the output is unsatisfactory.
 - **Dynamic Form Builder:** A clean, multi-step React form to configure the assessment.
 
-## 4. Setup & Local Development
+## 4. The Async Job System (How it Works)
+
+This is a critical architectural decision in VedaAI. Understanding WHY the async system exists is key to understanding the codebase and scaling AI applications.
+
+### Why not just call the LLM directly in the API route?
+An LLM call typically takes 5–15 seconds to generate a full question paper. HTTP requests timeout after ~30s and feel broken to the user. If you call the LLM directly inside the Express route handler, you introduce three major problems:
+1. The user stares at a spinner with no feedback for 10+ seconds.
+2. If the connection drops, the generation is lost entirely — no retry mechanism.
+3. If 10 teachers submit at once, 10 LLM calls run in parallel, causing immediate rate limits and server memory spikes.
+
+### How BullMQ fixes this
+
+- **Queue:** When the API receives a form submit, it immediately adds a job to the BullMQ queue and returns a `{jobId}` to the frontend. The API response is instant — no waiting.
+- **Worker:** A separate background process (`generationWorker.ts`) runs continuously, pulling jobs from the queue one at a time. It performs the slow work: prompt building, LLM execution, parsing, and database saving.
+- **Redis:** BullMQ stores the job state in Redis. If the server crashes mid-generation, the job remains safely in Redis and gets retried automatically when the server restarts.
+
+### WebSocket Real-time Updates
+The worker emits progress events to the WebSocket server as it runs. The frontend receives these events in real time — updating the progress bar and status text seamlessly without polling the API.
+
+- **Job Lifecycle States:** `queued` → `processing` → `completed` (or `failed`)
+Each state is stored in both MongoDB (`Assignment.status`) and BullMQ/Redis (`job.state`). The frontend only learns about state changes via WebSocket events; it never polls the API for job status.
+
+- **WebSocket Room System:** When a frontend connects with `?jobId=abc123`, the WS server stores that socket in a map: `rooms["abc123"] = [socket]`. When the worker finishes job `abc123`, it only sends the `JOB_COMPLETE` event to sockets inside `rooms["abc123"]`. This ensures multiple teachers can watch different generation jobs simultaneously, only receiving their own updates.
+
+## 5. Setup & Local Development
 ### Prerequisites
 - Node.js (v18+)
 - MongoDB Atlas cluster URL (or local instance)
@@ -50,7 +74,7 @@ The project is built using a modern, scalable stack, separated into a distinct f
 
 Both the Next.js app (http://localhost:3000) and the backend API (http://localhost:4000) will now be running.
 
-## 5. Deployment Guide
+## 6. Deployment Guide
 The architecture is designed to be fully deployable with zero local infrastructure.
 
 **Backend Deployment (Railway):**
@@ -68,7 +92,7 @@ The architecture is designed to be fully deployable with zero local infrastructu
    - `NEXT_PUBLIC_WS_URL`: Your deployed Railway WebSocket URL (e.g., wss://your-backend.railway.app)
 4. Deploy.
 
-## 6. API Documentation
+## 7. API Documentation
 
 ### Create Assignment
 `POST /api/assignments`
@@ -90,7 +114,7 @@ The architecture is designed to be fully deployable with zero local infrastructu
 `ws://<backend_url>/ws?jobId=<jobId>`
 - **Description:** Connect to receive real-time JSON events (`{ type: "status", status: "processing", progress: 50, message: "..." }`) about job progress.
 
-## 7. Known Limitations & Future Improvements
+## 8. Known Limitations & Future Improvements
 - **Rate Limiting:** AI generation is currently bounded by the underlying LLM provider's rate limits. Future improvements could include fallback providers or enhanced queuing strategies.
 - **PDF Formatting:** Client-side HTML-to-PDF is subject to varying browser rendering engines. For complex multi-page tables, slight margin discrepancies might occur.
 - **Authentication:** The app currently mocks a fixed user ("Lakshya Sharma"). Integrating NextAuth.js or Clerk is a planned future improvement.
